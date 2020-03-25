@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "128020890766",
+    "firebase_url": "https://probricks-929e5.firebaseio.com",
+    "project_id": "probricks-929e5",
+    "storage_bucket": "probricks-929e5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:128020890766:android:d11240a7c7e00948a9b5df",
+        "android_client_info": {
+          "package_name": "com.bri"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "128020890766-kenp87n1q9nn3bdaosjgfip27o2dllfp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAMQyRZ9I7J3IEt3HA-Y5FwbUIVD7Kbo4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "128020890766-kenp87n1q9nn3bdaosjgfip27o2dllfp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
