@@ -11,15 +11,21 @@ import { firebase } from '@react-native-firebase/auth';
 
 const Stack = createStackNavigator();
 
-firebase.initializeApp();
+const firebaseConfig= {
+  apiKey:'AIzaSyC6TTpQUP8gZVC-nR6AxCvRMs15-ParSwI',
+  
+  };
+  firebase.initializeApp(firebaseConfig);
+
+;
 
 export default function AppNavigator(){
   return(
    
     <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
-            {/* <Stack.Screen name="Login" component={LoginScreen}/> */}
-            <Stack.Screen name="Signup" component={SignupScreen}/>
+            {/* <Stack.Screen name="Login" component={LoginScreen}/>
+            <Stack.Screen name="Signup" component={SignupScreen}/> */}
             <Stack.Screen name="Home" component={HomeScreen}/>
         </Stack.Navigator>
   </NavigationContainer>

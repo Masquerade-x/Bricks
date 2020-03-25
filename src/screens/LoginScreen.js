@@ -13,20 +13,16 @@ import { firebase } from '@react-native-firebase/auth';
 
 
 export default function LoginScreen({navigation}){
-  const[initializing,setInitializing] = useState(true);
-  const[password,setPassword]=useState(' ');
-  const[email,setEmail]=useState(' ');
-
+  const[password,setPassword]=useState('');
+  const[email,setEmail]=useState('');
+ 
  function handleLogin(){
    console.log('hello');
-    // firebase.auth().signInWithEmailAndPassword(email,password).then(()=>navigation.navigate('Login')).catch(error=>setErrorMessage(error))
+    firebase.auth().signInWithEmailAndPassword(email,password).then(()=>navigation.navigate('Home')).catch(error=>setErrorMessage(error))
  }
   console.log(email,password);
 
-  // function onAuthStatusChanged(user){
-  //   setUser(user);
-  //   if(initializing)setInitializing(false);
-  // }
+ 
 
   // useEffect(()=>{
   //   const unsubscribe = auth.onAuthStatusChanged(onAuthStatusChanged);

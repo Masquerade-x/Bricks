@@ -1,35 +1,74 @@
 import React, { useState, useEffect } from 'react'
 import {SafeAreaView,View,StyleSheet} from 'react-native'
-import { Button,TextInput,Text,Avatar} from 'react-native-paper';
-import * as firebase from '@react-native-firebase/auth';
+import { Button,TextInput,Text,Avatar,Searchbar,List,Drawer} from 'react-native-paper';
+import  {firebase} from '@react-native-firebase/auth';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
+import {
+    responsiveHeight,
+    responsiveWidth,
+    responsiveFontSize
+  } from "react-native-responsive-dimensions";
 
-export default function HomeScreen({navigation}){
+export default function HomeScreen({navigation,user}){
 
     const[name,setName]=useState('');
     const[email,SetEmail]=useState('');
-
-    // useEffect(()=>{
-    //     const[email,name]= firebase.auth().currentUser;
-    //     setName(name)
-    //     SetEmail(email)
-    // })
-
-    // const signOutUser =()=>{
-    //     navigation.navigate('Login')
-    // }
+    const[initializing,setInitializing] = useState(true);
+    const[active,setActive]=useState('first');
 
 
+    function onAuthStateChanged(user) {
+        setName(user);
+        if (initializing) setInitializing(false);
+      }
+
+    useEffect(()=>{
+        const unsubscribe = auth().onAuthStateChanged(onAuthStateChanged);
+        return unsubscribe;
+      },[])
+     
+
+    const signOutUser =()=>{
+        navigation.navigate('Login')
+    }
+        
+
+    
     return(
         <View style={styles.container} >
-            <Text>Hi {name}</Text>
-            <TouchableOpacity onPress={()=>navigation.navigate('Login')}>
-                <Text>Log Out</Text>
-            </TouchableOpacity>
+            <View style={styles.topBar}>
+                <Text style={{fontSize:30,color:'purple'}}>Welcome</Text>
+                <TouchableOpacity onPress={signOutUser}>
+                    <Text style={{fontSize:30,color:'purple'}}>Log Out</Text>
+                </TouchableOpacity>
+            </View>
+            <View style={styles.screen}>
+                <Searchbar
+                style={{borderRadius:40,width:responsiveHeight(50)}}
+                    placeholder="Search"
+                    iconColor='red'
+                />
+            </View>
+            <View>
+           
+            </View>           
+
+         
         </View>
         
     )
+
 }
 
-const styles = StyleSheet.create({}) 
+const styles = StyleSheet.create({
+    topBar:{
+        flexDirection:'row',
+        backgroundColor:'red',
+        justifyContent:'space-between'
+    },
+    screen:{
+        alignItems:'flex-end',
+        backgroundColor:'green'
+        }
+}) 

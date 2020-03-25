@@ -1,5 +1,5 @@
 
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import {SafeAreaView,View,StyleSheet} from 'react-native'
 import { Button,TextInput,Text,Avatar} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -10,7 +10,6 @@ import {
 } from "react-native-responsive-dimensions";
 import auth from '@react-native-firebase/auth';
 import { firebase } from '@react-native-firebase/auth';
-
 
 // async function Register(email,password){
 //   try{
@@ -25,18 +24,23 @@ import { firebase } from '@react-native-firebase/auth';
 //     console.error(e.message)
 //   }
 // }
-async function Register(email, password) {
-  try {
-    await auth().createUserWithEmailAndPassword(email, password);
-  } catch (e) {
-    console.error(e.message);
-  }
-}
+
+
+
+  
+
 
 export default function Signup({navigation}){
-  const[password,setPassword]=useState(' ');
-  const[email,setEmail]=useState(' ');
-  const[name,setName]=useState(' ');
+  const[password,setPassword]=useState('');
+  const[email,setEmail]=useState('');
+  const[name,setName]=useState('');
+  const[errorMessage,setErrorMessage]=useState('');
+
+  // function Register(email, password) {
+  //   console.log('clicked')
+  //   firebase.auth().createUserWithEmailAndPassword(email, password).then(navigation.navigate('Login'))
+  //   .catch(error=>console.log(error));
+  // };
 
   return(
     <View style={styles.container}>
@@ -51,7 +55,13 @@ export default function Signup({navigation}){
                 <TextInput label='Password' mode='outlined' style={styles.textInput} autoCapitalize="none" onChangeText={e=>setPassword(e)} value={password}></TextInput>
             </View>
             <View style={[styles.btnText,styles.class]}>
-                  <Button  mode="contained" onPress={Register()} style={styles.btn}>
+                  <Button  mode="contained" onPress={()=>{
+                    firebase.auth().createUserWithEmailAndPassword(email, password).then(navigation.navigate('Login'))
+                    .catch(error=>{
+                      var errorCode = error.code;
+                      var errorMessage = error.message;
+                    })
+                  }} style={styles.btn}>
                         Sign Up
                   </Button>
                   
