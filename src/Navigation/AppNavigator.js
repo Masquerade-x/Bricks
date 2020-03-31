@@ -5,7 +5,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Provider as PaperProvider } from 'react-native-paper';
 import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
-import HomeScreen from '../screens/HomeScreen'
+import HomeScreen from '../screens/HomeScreen';
+import EnterProperty from '../screens/EnterProperty';
 import { firebase } from '@react-native-firebase/auth';
 
 
@@ -24,9 +25,11 @@ export default function AppNavigator(){
    
     <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
-            {/* <Stack.Screen name="Login" component={LoginScreen}/>
-            <Stack.Screen name="Signup" component={SignupScreen}/> */}
+            <Stack.Screen name="Login" component={LoginScreen}/>
+            <Stack.Screen name="Signup" component={SignupScreen}/>
             <Stack.Screen name="Home" component={HomeScreen}/>
+            {/* <Stack.Screen name="Enter" component={EnterProperty}/> */}
+
         </Stack.Navigator>
   </NavigationContainer>
   )

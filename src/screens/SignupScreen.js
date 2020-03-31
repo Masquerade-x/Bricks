@@ -1,6 +1,6 @@
 
 import React,{useState, useEffect} from 'react';
-import {SafeAreaView,View,StyleSheet} from 'react-native'
+import {SafeAreaView,View,StyleSheet, AsyncStorage} from 'react-native'
 import { Button,TextInput,Text,Avatar} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {
@@ -10,25 +10,7 @@ import {
 } from "react-native-responsive-dimensions";
 import auth from '@react-native-firebase/auth';
 import { firebase } from '@react-native-firebase/auth';
-
-// async function Register(email,password){
-//   try{
-//     await firebase.auth().createUserWithEmailAndPassword(email,password)
-//     .then(userCredentials=>{
-//       return userCredentials.user.updateProfile({
-//         displayName:name
-//       })
-//     })
-//     navigation.navigate('Login');
-//   }catch(e){
-//     console.error(e.message)
-//   }
-// }
-
-
-
-  
-
+import Person from '../components/Person';
 
 export default function Signup({navigation}){
   const[password,setPassword]=useState('');
@@ -36,11 +18,17 @@ export default function Signup({navigation}){
   const[name,setName]=useState('');
   const[errorMessage,setErrorMessage]=useState('');
 
-  // function Register(email, password) {
-  //   console.log('clicked')
-  //   firebase.auth().createUserWithEmailAndPassword(email, password).then(navigation.navigate('Login'))
-  //   .catch(error=>console.log(error));
-  // };
+  async function onCreateAccount() {
+    console.log('pressed')
+    const uid = auth().currentUser.uid;
+    const ref = database().ref(`/users/${uid}`);
+   
+    await ref.set({
+      uid,
+      name: 'Joe Bloggs',
+      role: 'admin',
+    });
+  }
 
   return(
     <View style={styles.container}>
@@ -56,7 +44,11 @@ export default function Signup({navigation}){
             </View>
             <View style={[styles.btnText,styles.class]}>
                   <Button  mode="contained" onPress={()=>{
-                    firebase.auth().createUserWithEmailAndPassword(email, password).then(navigation.navigate('Login'))
+                    firebase.auth().createUserWithEmailAndPassword(email, password)
+                    .then(()=>{onCreateAccount()
+                      navigation.navigate('Login')
+                    })
+                   
                     .catch(error=>{
                       var errorCode = error.code;
                       var errorMessage = error.message;

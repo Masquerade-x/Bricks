@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import {SafeAreaView,View,StyleSheet} from 'react-native'
-import { Button,TextInput,Text,Avatar,Searchbar,List,Drawer} from 'react-native-paper';
+import {SafeAreaView,View,StyleSheet, AsyncStorage} from 'react-native'
+import {Text,Avatar,Searchbar,Card,Title,Paragraph} from 'react-native-paper';
 import  {firebase} from '@react-native-firebase/auth';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity, FlatList } from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
 import {
     responsiveHeight,
     responsiveWidth,
     responsiveFontSize
   } from "react-native-responsive-dimensions";
+import DrawerButton from '../components/DrawerButton';
+import Person from '../components/Person';
+import database from '@react-native-firebase/database';
+
+
+
+
 
 export default function HomeScreen({navigation,user}){
 
@@ -17,58 +24,62 @@ export default function HomeScreen({navigation,user}){
     const[initializing,setInitializing] = useState(true);
     const[active,setActive]=useState('first');
 
+    async function onSignIn() {
+        // Get the users ID
+        const uid = auth().currentUser.uid;
+       
+        // Create a reference
+        const ref = database().ref(`/users/${uid}`);
+       
+        // Fetch the data snapshot
+        const snapshot = await ref.once('value');
+       
+        console.log('User data: ', snapshot.val());
+      }
 
     function onAuthStateChanged(user) {
         setName(user);
+        console.log(user);
         if (initializing) setInitializing(false);
       }
 
     useEffect(()=>{
         const unsubscribe = auth().onAuthStateChanged(onAuthStateChanged);
+        
         return unsubscribe;
       },[])
-     
 
     const signOutUser =()=>{
         navigation.navigate('Login')
     }
         
-
+     console.log(name,)
     
     return(
-        <View style={styles.container} >
-            <View style={styles.topBar}>
-                <Text style={{fontSize:30,color:'purple'}}>Welcome</Text>
-                <TouchableOpacity onPress={signOutUser}>
-                    <Text style={{fontSize:30,color:'purple'}}>Log Out</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.screen}>
-                <Searchbar
-                style={{borderRadius:40,width:responsiveHeight(50)}}
-                    placeholder="Search"
-                    iconColor='red'
-                />
-            </View>
-            <View>
-           
-            </View>           
-
-         
-        </View>
+              <View style={styles.container} >
+                  <View style={styles.topArea}>
+                        <View style={styles.topBar}>
+                        <Text style={{fontSize:20,color:'purple'}}>Welcome{Person.name }</Text>
+                        <TouchableOpacity onPress={signOutUser}>
+                            <Text style={{fontSize:20,color:'purple'}}>Log Out</Text>
+                        </TouchableOpacity>
+                    </View>
+                   
+                  </View>
+              </View>
         
-    )
-
-}
-
+            )
+    }
+        
 const styles = StyleSheet.create({
+    topArea:{
+        backgroundColor:'orange',
+        justifyContent:"space-evenly",
+        height:100
+    },
     topBar:{
         flexDirection:'row',
-        backgroundColor:'red',
-        justifyContent:'space-between'
-    },
-    screen:{
-        alignItems:'flex-end',
-        backgroundColor:'green'
-        }
-}) 
+        justifyContent:'space-between',
+        height:30
+    }
+})
