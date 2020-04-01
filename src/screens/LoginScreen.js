@@ -22,23 +22,25 @@ export default function LoginScreen({navigation}){
   const[password,setPassword]=useState('');
   const[email,setEmail]=useState('');
   const[errorMessage,setErrorMessage]=useState('');
+  const [username,setUserName]=useState('');
 
 
   async function onSignIn() {
-    console.log('signin running')
 
     // Get the users ID
     const uid = auth().currentUser.uid;
    
     // Create a reference
     const ref = database().ref(`/users/${uid}`);
-   
     // Fetch the data snapshot
     const snapshot = await ref.once('value');
+    // setUserName(snapshot.child('name').val());
+     console.log(snapshot.child('displayName').val());
+    
+    
   }
 
  function handleLogin(AsyncStorage){
-   console.log('hello');
     firebase.auth().signInWithEmailAndPassword(email,password)
     .then(()=>{
      onSignIn()

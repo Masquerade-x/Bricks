@@ -12,6 +12,7 @@ import {
 import DrawerButton from '../components/DrawerButton';
 import Person from '../components/Person';
 import database from '@react-native-firebase/database';
+import { Value } from 'react-native-reanimated';
 
 
 
@@ -22,7 +23,8 @@ export default function HomeScreen({navigation,user}){
     const[name,setName]=useState('');
     const[email,SetEmail]=useState('');
     const[initializing,setInitializing] = useState(true);
-    const[active,setActive]=useState('first');
+    const[userName,setUserName]=useState('first');
+    
 
     async function onSignIn() {
         // Get the users ID
@@ -34,9 +36,13 @@ export default function HomeScreen({navigation,user}){
         // Fetch the data snapshot
         const snapshot = await ref.once('value');
        
-        console.log('User data: ', snapshot.val());
+        
+        uName = snapshot.child('displayName').val();
+        setUserName(uName);
+        console.log(uName,'ye waala');
       }
 
+    
     function onAuthStateChanged(user) {
         setName(user);
         console.log(user);
@@ -45,8 +51,9 @@ export default function HomeScreen({navigation,user}){
 
     useEffect(()=>{
         const unsubscribe = auth().onAuthStateChanged(onAuthStateChanged);
-        
+        onSignIn();
         return unsubscribe;
+        
       },[])
 
     const signOutUser =()=>{
@@ -59,7 +66,7 @@ export default function HomeScreen({navigation,user}){
               <View style={styles.container} >
                   <View style={styles.topArea}>
                         <View style={styles.topBar}>
-                        <Text style={{fontSize:20,color:'purple'}}>Welcome{Person.name }</Text>
+                        <Text style={{fontSize:20,color:'purple'}}>Welcome {userName}</Text>
                         <TouchableOpacity onPress={signOutUser}>
                             <Text style={{fontSize:20,color:'purple'}}>Log Out</Text>
                         </TouchableOpacity>

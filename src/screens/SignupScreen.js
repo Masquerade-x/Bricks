@@ -11,6 +11,7 @@ import {
 import auth from '@react-native-firebase/auth';
 import { firebase } from '@react-native-firebase/auth';
 import Person from '../components/Person';
+import database from '@react-native-firebase/database';
 
 export default function Signup({navigation}){
   const[password,setPassword]=useState('');
@@ -18,14 +19,17 @@ export default function Signup({navigation}){
   const[name,setName]=useState('');
   const[errorMessage,setErrorMessage]=useState('');
 
+  console.log(name);
+
   async function onCreateAccount() {
     console.log('pressed')
     const uid = auth().currentUser.uid;
     const ref = database().ref(`/users/${uid}`);
+    console.log(ref,'create ref')
    
     await ref.set({
       uid,
-      name: 'Joe Bloggs',
+      name,
       role: 'admin',
     });
   }
