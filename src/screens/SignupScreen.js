@@ -19,7 +19,6 @@ export default function Signup({navigation}){
   const[name,setName]=useState('');
   const[errorMessage,setErrorMessage]=useState('');
 
-  console.log(name);
 
   async function onCreateAccount() {
     console.log('pressed')

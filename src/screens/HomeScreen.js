@@ -23,7 +23,7 @@ export default function HomeScreen({navigation,user}){
     const[name,setName]=useState('');
     const[email,SetEmail]=useState('');
     const[initializing,setInitializing] = useState(true);
-    const[userName,setUserName]=useState('first');
+    const[userName,setUserName]=useState('');
     
 
     async function onSignIn() {
@@ -37,7 +37,7 @@ export default function HomeScreen({navigation,user}){
         const snapshot = await ref.once('value');
        
         
-        uName = snapshot.child('displayName').val();
+        uName = snapshot.child('name').val();
         setUserName(uName);
         console.log(uName,'ye waala');
       }
@@ -45,7 +45,7 @@ export default function HomeScreen({navigation,user}){
     
     function onAuthStateChanged(user) {
         setName(user);
-        console.log(user);
+      
         if (initializing) setInitializing(false);
       }
 

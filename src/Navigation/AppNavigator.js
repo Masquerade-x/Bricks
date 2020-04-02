@@ -27,9 +27,9 @@ export default function AppNavigator(){
    
     <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
-            {/* <Stack.Screen name="Login" component={LoginScreen}/>
+            <Stack.Screen name="Login" component={LoginScreen}/>
             <Stack.Screen name="Signup" component={SignupScreen}/>
-            <Stack.Screen name="Home" component={HomeScreen}/> */}
+            <Stack.Screen name="Home" component={HomeScreen}/>
             {/* <Stack.Screen name="Enter" component={EnterProperty}/> */}
             <Stack.Screen name="Chat" component={ChatScreen} />
         </Stack.Navigator>

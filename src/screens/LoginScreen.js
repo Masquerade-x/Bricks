@@ -1,6 +1,6 @@
 
-import React, { useState, useEffect } from 'react';
-import {SafeAreaView,View,StyleSheet,AsyncStorage} from 'react-native'
+import React, { useState, useEffect, useCallback } from 'react';
+import {SafeAreaView,View,StyleSheet,RefreshControl,ScrollView} from 'react-native'
 import { Button,TextInput,Text,Avatar} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {
@@ -11,19 +11,13 @@ import {
 import { firebase } from '@react-native-firebase/auth';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
-
-import Person from '../components/Person';
-
-
-  
-
+import LinearGradient from 'react-native-linear-gradient';
 
 export default function LoginScreen({navigation}){
   const[password,setPassword]=useState('');
   const[email,setEmail]=useState('');
   const[errorMessage,setErrorMessage]=useState('');
-  const [username,setUserName]=useState('');
-
+  const[refreshing, setRefreshing] = React.useState(false);
 
   async function onSignIn() {
 
@@ -35,10 +29,22 @@ export default function LoginScreen({navigation}){
     // Fetch the data snapshot
     const snapshot = await ref.once('value');
     // setUserName(snapshot.child('name').val());
-     console.log(snapshot.child('displayName').val());
-    
-    
+     console.log(snapshot.child('displayName').val());  
   }
+
+  useEffect(()=>{
+    const unsubscribe = navigation.addListener('focus',()=>{
+      onRefresh()
+    });
+    return unsubscribe;
+  },[navigation])
+
+  const onRefresh = useCallback(()=>{
+    setRefreshing(true)
+    setEmail('')
+    setPassword('')
+    setRefreshing(false)
+  },[refreshing])
 
  function handleLogin(AsyncStorage){
     firebase.auth().signInWithEmailAndPassword(email,password)
@@ -50,13 +56,11 @@ export default function LoginScreen({navigation}){
     .catch(error=>setErrorMessage(error))   
   
   }
-
- 
-
- 
+  
   return(
-    <View style={styles.container}>
-     
+      <ScrollView contentContainerStyle={styles.scrollView} refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }>
         <View style={styles.welcomemsg}>
         <Icon name="login" size={90} color="#6a0dad" />
         </View>
@@ -83,16 +87,21 @@ export default function LoginScreen({navigation}){
                   </Button>
                   <Text style={{marginTop:10}}>New to it ?<Text onPress={()=>navigation.navigate('Signup')} style={{color:'#6a0dad'}}> Signup</Text></Text>
             </View>
-            
-        </View>
-      </View>
+          </View>
+          <View styles={styles.owner}>
+            <Text style={{alignSelf:'flex-end'}}>
+              &#xA9;Masquerade
+             </Text>
+          </View>
+        </ScrollView>
+  
   )
     
 }
 
 const styles = StyleSheet.create({
-  container:{
-    flex:1,
+    scrollView:{
+      flex:1,
     },
   welcomemsg:{
     flex:1,
@@ -126,6 +135,6 @@ const styles = StyleSheet.create({
   },
   btn:{
     width:responsiveWidth(50),
-
-  }
+  },
+ 
 })
