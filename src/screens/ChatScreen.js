@@ -11,6 +11,7 @@ export default function ChatScreen(){
         </View>
     )
 }
+
 const styles = StyleSheet.create({
     container:{
         flex:1

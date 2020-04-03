@@ -4,6 +4,7 @@ import com.facebook.react.ReactActivity;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
+import com.zoontek.rnbootsplash.RNBootSplash; // <- add this necessary import
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,6 +23,11 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName(){
     return "bri";
   };
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    RNBootSplash.init(R.drawable.bootsplash, MainActivity.this); // <- display the generated bootsplash.xml drawable over our MainActivity
+  }
 
    public void basicReadWrite() {
         // [START write_message]

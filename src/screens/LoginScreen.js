@@ -17,7 +17,7 @@ export default function LoginScreen({navigation}){
   const[password,setPassword]=useState('');
   const[email,setEmail]=useState('');
   const[errorMessage,setErrorMessage]=useState('');
-  const[refreshing, setRefreshing] = React.useState(false);
+  const[refreshing, setRefreshing] =useState(false);
 
   async function onSignIn() {
 

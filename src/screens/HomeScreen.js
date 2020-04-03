@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import {SafeAreaView,View,StyleSheet, AsyncStorage} from 'react-native'
-import {Text,Avatar,Searchbar,Card,Title,Paragraph} from 'react-native-paper';
+import React, { useState, useEffect, useCallback } from 'react'
+import {SafeAreaView,View,StyleSheet, AsyncStorage,RefreshControl,ScrollView} from 'react-native'
+import {Text} from 'react-native-paper';
 import  {firebase} from '@react-native-firebase/auth';
 import { TouchableOpacity, FlatList } from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
@@ -12,11 +12,6 @@ import {
 import DrawerButton from '../components/DrawerButton';
 import Person from '../components/Person';
 import database from '@react-native-firebase/database';
-import { Value } from 'react-native-reanimated';
-
-
-
-
 
 export default function HomeScreen({navigation,user}){
 
@@ -24,6 +19,8 @@ export default function HomeScreen({navigation,user}){
     const[email,SetEmail]=useState('');
     const[initializing,setInitializing] = useState(true);
     const[userName,setUserName]=useState('');
+    const[refreshing, setRefreshing] =useState(false);
+    const[users,setUsers]=useState([]);
     
 
     async function onSignIn() {
@@ -35,22 +32,54 @@ export default function HomeScreen({navigation,user}){
        
         // Fetch the data snapshot
         const snapshot = await ref.once('value');
-       
         
         uName = snapshot.child('name').val();
         setUserName(uName);
         console.log(uName,'ye waala');
+
+        let dbRef = database().ref('users');
+        dbRef.on('child_added',(val) => {
+          let person = val.val();
+          person.email=val.key;
+          setUsers(prevState=> {
+            return {
+              ...prevState.users,person
+            }
+          })
+        })
       }
 
+       
+          renderRow = ({item})=>{
+            
+            console.log(item,'here is item')
+             return(
+               <TouchableOpacity onPress={()=>navigation.navigate('Chat')}>
+                 <Text>hello{item.name}</Text>
+               </TouchableOpacity>
+             )
+           }
+ 
+
+      
+      
+
+      // const onRefresh = useCallback(()=>{
+      //   setRefreshing(true)
+        
+      //   setRefreshing(false)
+      // },[refreshing])
     
     function onAuthStateChanged(user) {
         setName(user);
+        console.log(user)
       
         if (initializing) setInitializing(false);
       }
 
     useEffect(()=>{
         const unsubscribe = auth().onAuthStateChanged(onAuthStateChanged);
+        console.log(unsubscribe,'unsubscribe h ye');
         onSignIn();
         return unsubscribe;
         
@@ -60,33 +89,36 @@ export default function HomeScreen({navigation,user}){
         navigation.navigate('Login')
     }
         
-     console.log(name,)
+
+     
     
-    return(
-              <View style={styles.container} >
-                  <View style={styles.topArea}>
-                        <View style={styles.topBar}>
-                        <Text style={{fontSize:20,color:'purple'}}>Welcome {userName}</Text>
-                        <TouchableOpacity onPress={signOutUser}>
-                            <Text style={{fontSize:20,color:'purple'}}>Log Out</Text>
-                        </TouchableOpacity>
-                    </View>
-                   
-                  </View>
-              </View>
-        
-            )
+    return(               
+          <View style={styles.body}>
+              {/* <FlatList 
+              data={users}
+              renderItem={renderRow}
+              keyExtractor={item=>item.email}/> */}
+          </View>
+         )
     }
         
 const styles = StyleSheet.create({
+    scrollView:{
+      flex:1
+    },
     topArea:{
-        backgroundColor:'orange',
         justifyContent:"space-evenly",
-        height:100
+        height:50,
+        borderBottomColor:'grey',
+        borderBottomWidth:StyleSheet.hairlineWidth,
+        flex:1
     },
     topBar:{
         flexDirection:'row',
         justifyContent:'space-between',
-        height:30
+        height:30,
+    },
+    body:{
+      flex:15,
     }
 })
