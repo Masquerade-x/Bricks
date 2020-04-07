@@ -94,7 +94,6 @@ export default function LoginScreen({navigation}){
              </Text>
           </View>
         </ScrollView>
-  
   )
     
 }

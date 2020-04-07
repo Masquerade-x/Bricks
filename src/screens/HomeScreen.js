@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import {SafeAreaView,View,StyleSheet, AsyncStorage,RefreshControl,ScrollView} from 'react-native'
-import {Text} from 'react-native-paper';
+import {Text, IconButton, Colors } from 'react-native-paper';
 import  {firebase} from '@react-native-firebase/auth';
 import { TouchableOpacity, FlatList } from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
@@ -9,9 +9,13 @@ import {
     responsiveWidth,
     responsiveFontSize
   } from "react-native-responsive-dimensions";
-import DrawerButton from '../components/DrawerButton';
 import Person from '../components/Person';
 import database from '@react-native-firebase/database';
+import DrawerButton from '../components/DrawerButton';
+import LinearGradient from 'react-native-linear-gradient';
+
+
+
 
 export default function HomeScreen({navigation,user}){
 
@@ -50,19 +54,14 @@ export default function HomeScreen({navigation,user}){
       }
 
        
-          renderRow = ({item})=>{
-            
-            console.log(item,'here is item')
-             return(
-               <TouchableOpacity onPress={()=>navigation.navigate('Chat')}>
-                 <Text>hello{item.name}</Text>
-               </TouchableOpacity>
-             )
-           }
- 
-
-      
-      
+    renderRow = ({item})=>{
+      console.log(item,'here is item')
+        return(  
+            <TouchableOpacity onPress={()=>navigation.navigate('Chat')}>
+              <Text>hello{item.name}</Text>
+            </TouchableOpacity>              
+        )
+      }
 
       // const onRefresh = useCallback(()=>{
       //   setRefreshing(true)
@@ -90,35 +89,20 @@ export default function HomeScreen({navigation,user}){
     }
         
 
-     
     
-    return(               
-          <View style={styles.body}>
-              {/* <FlatList 
-              data={users}
-              renderItem={renderRow}
-              keyExtractor={item=>item.email}/> */}
-          </View>
+    
+    return(         
+      <LinearGradient colors={['#E91E63', '#9C27B0', '#673AB7']} style={styles.linearGradient}>
+          <Text>hello</Text>
+          {/* <IconButton icon="camera" onPress={navigation.openDrawer()}/> */}
+      </LinearGradient>
          )
     }
         
 const styles = StyleSheet.create({
-    scrollView:{
-      flex:1
+    linearGradient:{
+      flex:1,
+      backgroundColor:'red'
     },
-    topArea:{
-        justifyContent:"space-evenly",
-        height:50,
-        borderBottomColor:'grey',
-        borderBottomWidth:StyleSheet.hairlineWidth,
-        flex:1
-    },
-    topBar:{
-        flexDirection:'row',
-        justifyContent:'space-between',
-        height:30,
-    },
-    body:{
-      flex:15,
-    }
+    
 })
