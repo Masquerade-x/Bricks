@@ -83,18 +83,12 @@ export default function HomeScreen({navigation,user}){
         return unsubscribe;
         
       },[])
-
-    const signOutUser =()=>{
-        navigation.navigate('Login')
-    }
-        
-
     
     
     return(         
       <LinearGradient colors={['#E91E63', '#9C27B0', '#673AB7']} style={styles.linearGradient}>
           <Text>hello</Text>
-          {/* <IconButton icon="camera" onPress={navigation.openDrawer()}/> */}
+         
       </LinearGradient>
          )
     }
