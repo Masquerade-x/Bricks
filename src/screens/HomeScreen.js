@@ -52,6 +52,8 @@ export default function HomeScreen({navigation,user}){
         })
       }
 
+
+      console.log(users,'users h ye')
       
 
        
@@ -81,7 +83,11 @@ export default function HomeScreen({navigation,user}){
           <TouchableOpacity onPress={()=>navigation.navigate('Chat')}>
               <Text>{userName}</Text>
           </TouchableOpacity>
-          <FlatList />
+          <FlatList
+          data={users}
+          renderItem={renderRow}
+          keyExtractor={({item})=>console.log(item)}
+           />
       </LinearGradient>
          )
     }
