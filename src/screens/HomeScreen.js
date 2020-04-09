@@ -39,7 +39,6 @@ export default function HomeScreen({navigation,user}){
         
         uName = snapshot.child('name').val();
         setUserName(uName);
-        console.log(uName,'ye waala');
 
         let dbRef = database().ref('users');
         dbRef.on('child_added',(val) => {
@@ -52,6 +51,8 @@ export default function HomeScreen({navigation,user}){
           })
         })
       }
+
+      
 
        
     renderRow = ({item})=>{
@@ -69,26 +70,18 @@ export default function HomeScreen({navigation,user}){
       //   setRefreshing(false)
       // },[refreshing])
     
-    function onAuthStateChanged(user) {
-        setName(user);
-        console.log(user)
-      
-        if (initializing) setInitializing(false);
-      }
 
     useEffect(()=>{
-        const unsubscribe = auth().onAuthStateChanged(onAuthStateChanged);
-        console.log(unsubscribe,'unsubscribe h ye');
-        onSignIn();
-        return unsubscribe;
-        
+       onSignIn();
       },[])
     
     
     return(         
       <LinearGradient colors={['#E91E63', '#9C27B0', '#673AB7']} style={styles.linearGradient}>
-          <Text>hello</Text>
-         
+          <TouchableOpacity onPress={()=>navigation.navigate('Chat')}>
+              <Text>{userName}</Text>
+          </TouchableOpacity>
+          <FlatList />
       </LinearGradient>
          )
     }
