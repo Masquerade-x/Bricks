@@ -51,16 +51,14 @@ export default function HomeScreen({navigation,user}){
             }
           })
         })
-
+       
         const fbObject = snapshot.val();
         const newARR = Object.keys(fbObject).map((key)=>{
         fbObject[key].name = key;
-        // return fbObject[key];
-        console.log(fbObject[key],'fhjasdfkas')
+        return fbObject[key];
       });
 
-      console.log(newARR,'new arr')  
-       
+       console.log(newARR[2],'new array')
       }
 
     renderRow = ({item})=>{
