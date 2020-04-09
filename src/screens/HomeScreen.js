@@ -25,6 +25,7 @@ export default function HomeScreen({navigation,user}){
     const[userName,setUserName]=useState('');
     const[refreshing, setRefreshing] =useState(false);
     const[users,setUsers]=useState([]);
+    const[arr,setArr]=useState([]);
     
 
     async function onSignIn() {
@@ -50,13 +51,18 @@ export default function HomeScreen({navigation,user}){
             }
           })
         })
+
+        const fbObject = snapshot.val();
+        const newARR = Object.keys(fbObject).map((key)=>{
+        fbObject[key].name = key;
+        // return fbObject[key];
+        console.log(fbObject[key],'fhjasdfkas')
+      });
+
+      console.log(newARR,'new arr')  
+       
       }
 
-
-      console.log(users,'users h ye')
-      
-
-       
     renderRow = ({item})=>{
       console.log(item,'here is item')
         return(  
@@ -83,11 +89,11 @@ export default function HomeScreen({navigation,user}){
           <TouchableOpacity onPress={()=>navigation.navigate('Chat')}>
               <Text>{userName}</Text>
           </TouchableOpacity>
-          <FlatList
-          data={users}
+          {/* <FlatList
+          data={newARR}
           renderItem={renderRow}
           keyExtractor={({item})=>console.log(item)}
-           />
+           /> */}
       </LinearGradient>
          )
     }
