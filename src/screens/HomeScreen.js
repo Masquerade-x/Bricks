@@ -46,17 +46,21 @@ export default function HomeScreen({navigation,user}){
         .on('value', function (snapshot) {
             snapshot.forEach(function(childSnapshot) {
             var name=childSnapshot.val().name;
+            // var uid=childSnapshot.val().uid;
+            // console.log(uid);
             setArr(prevState=> [...prevState ,name])
            });
          });
       }
 
 
-    renderRow = (item)=>{
+    renderRow = ({item})=>{
       console.log(item,'here is item')
         return(  
-            <TouchableOpacity onPress={()=>navigation.navigate('Chat')}>
-              <Text>hello{item}</Text>
+            <TouchableOpacity onPress={()=>navigation.navigate('Chat',{name:item})} style={styles.touch}>
+              <Text style={{fontSize:20,marginTop:10,marginLeft:10,color:'white',fontFamily:'600'}}>
+                {item}
+              </Text>
             </TouchableOpacity>              
         )
       }
@@ -67,15 +71,12 @@ export default function HomeScreen({navigation,user}){
     
     
     return(         
-      <LinearGradient colors={['#E91E63', '#9C27B0', '#673AB7']} style={styles.linearGradient}>
-          {/* <TouchableOpacity onPress={()=>navigation.navigate('Chat')}>
-              <Text style={{fontSize:20}}>{userName}</Text>
-          </TouchableOpacity> */}
-          {/* <FlatList
+      <LinearGradient colors={['#2ecc71', '#27ae60']} style={styles.linearGradient}>
+          <FlatList
           data={arr}
           renderItem={renderRow}
-          keyExtractor={item=>item.index}
-           /> */}
+          keyExtractor={item=>item}
+           />
       </LinearGradient>
          )
     }
@@ -85,4 +86,7 @@ const styles = StyleSheet.create({
       flex:1,
       backgroundColor:'red'
     },
+    touch:{
+      height:40,
+    }
 })

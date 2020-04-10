@@ -18,6 +18,7 @@ import {
   DrawerItemList,
 } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {myName} from '../screens/ChatScreen';
 
 
 
@@ -44,8 +45,8 @@ export default function AppNavigator({navigation}){
         <Button mode="text" onPress={() => auth().signOut()}>
           Logout
         </Button>
-        <Button mode="text" onPress={()=>navigation.navigate('Home')}>
-          Chat
+        <Button mode="text" onPress={()=>navigation.navigate('Main')}>
+          Home
         </Button>
       </DrawerContentScrollView>
     );
@@ -64,7 +65,9 @@ export default function AppNavigator({navigation}){
         )
       })}>
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Chat" component={ChatScreen} />
+        <Stack.Screen name="Chat" component={ChatScreen} 
+       
+        />
       </Stack.Navigator>
     )
   }
