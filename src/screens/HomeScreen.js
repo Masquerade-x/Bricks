@@ -19,14 +19,14 @@ import LinearGradient from 'react-native-linear-gradient';
 
 export default function HomeScreen({navigation,user}){
 
-    const[name,setName]=useState('');
-    const[email,SetEmail]=useState('');
     const[initializing,setInitializing] = useState(true);
     const[userName,setUserName]=useState('');
     const[refreshing, setRefreshing] =useState(false);
     const[users,setUsers]=useState([]);
     const[arr,setArr]=useState([]);
     
+    console.log(arr,'arr2')
+
 
     async function onSignIn() {
         // Get the users ID
@@ -42,30 +42,13 @@ export default function HomeScreen({navigation,user}){
         setUserName(uName);
 
         let dbRef = database().ref('users');
-        dbRef.on('child_added',(val) => {
-          let person = val.val();
-          console.log(person);
-          const newARR = Object.keys(person).map((key)=>{
-            person[key].uid=key;
-            return person[key]
-            
-          //   setArr(prevState=> {
-          //   return {
-          //     ...prevState.users,person
-          //   }
-          // })
-        })
-        console.log(newARR[2],'new array')
-        setArr(newARR[2])
-      })
-       
-      //   const fbObject = snapshot.val();
-      //   const newARR = Object.keys(fbObject).map((key)=>{
-      //   fbObject[key].name = key;
-      //   return fbObject[key];
-      // });
-  
-      //  console.log(arr,'new array')
+        firebase.database().ref().child("users")
+        .on('value', function (snapshot) {
+            snapshot.forEach(function(childSnapshot) {
+            var name=childSnapshot.val().name;
+            setArr(prevState=> [...prevState ,name])
+           });
+         });
       }
 
 
@@ -78,13 +61,6 @@ export default function HomeScreen({navigation,user}){
         )
       }
 
-      // const onRefresh = useCallback(()=>{
-      //   setRefreshing(true)
-        
-      //   setRefreshing(false)
-      // },[refreshing])
-    
-
     useEffect(()=>{
        onSignIn();
       },[])
@@ -92,13 +68,13 @@ export default function HomeScreen({navigation,user}){
     
     return(         
       <LinearGradient colors={['#E91E63', '#9C27B0', '#673AB7']} style={styles.linearGradient}>
-          <TouchableOpacity onPress={()=>navigation.navigate('Chat')}>
+          {/* <TouchableOpacity onPress={()=>navigation.navigate('Chat')}>
               <Text style={{fontSize:20}}>{userName}</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           {/* <FlatList
           data={arr}
           renderItem={renderRow}
-          keyExtractor={({item})=>console.log(item)}
+          keyExtractor={item=>item.index}
            /> */}
       </LinearGradient>
          )
