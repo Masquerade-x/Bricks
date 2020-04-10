@@ -50,7 +50,6 @@ export default function LoginScreen({navigation}){
     firebase.auth().signInWithEmailAndPassword(email,password)
     .then(()=>{
      onSignIn()
-    navigation.navigate('Home')    
       }
     )
     .catch(error=>setErrorMessage(error))   

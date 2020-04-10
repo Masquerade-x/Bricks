@@ -44,28 +44,36 @@ export default function HomeScreen({navigation,user}){
         let dbRef = database().ref('users');
         dbRef.on('child_added',(val) => {
           let person = val.val();
-          person.email=val.key;
-          setUsers(prevState=> {
-            return {
-              ...prevState.users,person
-            }
-          })
+          console.log(person);
+          const newARR = Object.keys(person).map((key)=>{
+            person[key].uid=key;
+            return person[key]
+            
+          //   setArr(prevState=> {
+          //   return {
+          //     ...prevState.users,person
+          //   }
+          // })
         })
+        console.log(newARR[2],'new array')
+        setArr(newARR[2])
+      })
        
-        const fbObject = snapshot.val();
-        const newARR = Object.keys(fbObject).map((key)=>{
-        fbObject[key].name = key;
-        return fbObject[key];
-      });
-
-       console.log(newARR[2],'new array')
+      //   const fbObject = snapshot.val();
+      //   const newARR = Object.keys(fbObject).map((key)=>{
+      //   fbObject[key].name = key;
+      //   return fbObject[key];
+      // });
+  
+      //  console.log(arr,'new array')
       }
 
-    renderRow = ({item})=>{
+
+    renderRow = (item)=>{
       console.log(item,'here is item')
         return(  
             <TouchableOpacity onPress={()=>navigation.navigate('Chat')}>
-              <Text>hello{item.name}</Text>
+              <Text>hello{item}</Text>
             </TouchableOpacity>              
         )
       }
@@ -85,10 +93,10 @@ export default function HomeScreen({navigation,user}){
     return(         
       <LinearGradient colors={['#E91E63', '#9C27B0', '#673AB7']} style={styles.linearGradient}>
           <TouchableOpacity onPress={()=>navigation.navigate('Chat')}>
-              <Text>{userName}</Text>
+              <Text style={{fontSize:20}}>{userName}</Text>
           </TouchableOpacity>
           {/* <FlatList
-          data={newARR}
+          data={arr}
           renderItem={renderRow}
           keyExtractor={({item})=>console.log(item)}
            /> */}
@@ -101,5 +109,4 @@ const styles = StyleSheet.create({
       flex:1,
       backgroundColor:'red'
     },
-    
 })
