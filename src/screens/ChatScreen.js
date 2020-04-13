@@ -1,4 +1,4 @@
-import React, { useLayoutEffect,useState } from 'react'
+import React, { useLayoutEffect,useState, useEffect } from 'react'
 import {Text,View,TextInput,StyleSheet,FlatList,Dimensions} from 'react-native'
 import { responsiveFontSize, responsiveWidth } from 'react-native-responsive-dimensions'
 import { useRoute } from '@react-navigation/native'
@@ -17,6 +17,14 @@ export default function ChatScreen({navigation,route}){
            headerTitle:route.params.name,
         })
    })
+
+   useEffect(()=>{
+       database().ref('messages').child(route.params.name)
+       .on("child_added",(value)=>{
+           setMessageList(prevState=>[...prevState,value.val()])
+       })
+   },[])
+
 
    async function sendMessage(){
         if(textMessage.length>0){
@@ -40,7 +48,7 @@ export default function ChatScreen({navigation,route}){
            <View  style={{
                flexDirection:'row',
                width:'60%',
-               alignSelf:item.from===route.params.name ? 'flex-end':"flex-start",
+               alignItems:item.from===route.params.name ? 'flex-end':'flex-start',
                backgroundColor:item.from===route.params.name ? '#00897b':'#7cb342',
                borderRadius:5,
                marginBottom:10
@@ -57,25 +65,29 @@ export default function ChatScreen({navigation,route}){
 
     return(
         <LinearGradient colors={['#2ecc71', '#27ae60']} style={styles.linearGradient}>
+               
             <View style={styles.body}>
-                <FlatList 
+            <FlatList 
                 style={{padding:10,height:height+0.8}}
                 data={messageList}
                 renderItem={renderRow}
                 keyExtractor={(item,index)=>index.toString()}
                 />
-                <TextInput style={styles.input} 
-                           value={textMessage}
-                           placeholder='   Enter Message'
-                           onChangeText={e=>setTextMessage(e)} 
-                />
-                <IconButton
-                    style={styles.sendBtn}
-                    icon="send-circle"
-                    color='white'
-                    size={40}
-                    onPress={sendMessage}
-                />
+                <View style={styles.enterMsg}>
+                    <TextInput style={styles.input} 
+                            value={textMessage}
+                            placeholder='   Enter Message'
+                            onChangeText={e=>setTextMessage(e)} 
+                    />
+                    <IconButton
+                        style={styles.sendBtn}
+                        icon="send-circle"
+                        color='white'
+                        size={40}
+                        onPress={sendMessage}
+                    />
+                </View>
+                
             </View>
         </LinearGradient>
     )
@@ -87,7 +99,9 @@ const styles = StyleSheet.create({
     },
     body:{
         flex:1,
-        flexDirection:"row",
+    },
+    enterMsg:{
+        flexDirection:'row'
     },
     input:{
         justifyContent:'center',

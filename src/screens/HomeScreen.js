@@ -13,6 +13,7 @@ import Person from '../components/Person';
 import database from '@react-native-firebase/database';
 import DrawerButton from '../components/DrawerButton';
 import LinearGradient from 'react-native-linear-gradient';
+import { useRoute } from '@react-navigation/native';
 
 
 
@@ -48,7 +49,11 @@ export default function HomeScreen({navigation,user}){
             var name=childSnapshot.val().name;
             // var uid=childSnapshot.val().uid;
             // console.log(uid);
+            if(uName===name){
+              uName=name
+            }else{
             setArr(prevState=> [...prevState ,name])
+                  }
            });
          });
       }
