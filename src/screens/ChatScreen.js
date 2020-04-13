@@ -1,5 +1,5 @@
 import React, { useLayoutEffect,useState } from 'react'
-import {Text,View,TextInput,StyleSheet} from 'react-native'
+import {Text,View,TextInput,StyleSheet,FlatList,Dimensions} from 'react-native'
 import { responsiveFontSize, responsiveWidth } from 'react-native-responsive-dimensions'
 import { useRoute } from '@react-navigation/native'
 import {  IconButton,Colors } from 'react-native-paper'
@@ -10,7 +10,7 @@ import User from '../User';
 
 export default function ChatScreen({navigation,route}){
     const[textMessage,setTextMessage]=useState('')
-    const[email,setEmail]=useState('')
+    const[messageList,setMessageList]=useState([])
 
    useLayoutEffect(()=>{
        navigation.setOptions({
@@ -20,23 +20,50 @@ export default function ChatScreen({navigation,route}){
 
    async function sendMessage(){
         if(textMessage.length>0){
-            let msgId=database().ref('messaages').child(User.email).child().push().key;
+            let msgId=database().ref('messaages').child(route.params.name).push().key;
             let updates ={};
             let message ={
                 message:textMessage,
                 time:database.ServerValue.TIMESTAMP,
-                from:User.email
+                from:route.params.name
             }
-            updates['messages/'+User.email+'/'+email+'/'+msgId]=message;
-            updates['messages/'+email+'/'+User.email+'/'+msgId]=message;
+            updates['messages/'+route.params.name+'/'+msgId]=message;
+            console.log(updates)
             database().ref().update(updates);
             setTextMessage('')
 
         }
    }
+
+   renderRow =({item})=>{
+       return(
+           <View  style={{
+               flexDirection:'row',
+               width:'60%',
+               alignSelf:item.from===route.params.name ? 'flex-end':"flex-start",
+               backgroundColor:item.from===route.params.name ? '#00897b':'#7cb342',
+               borderRadius:5,
+               marginBottom:10
+           }}>
+               <Text style={{color:'#fff',padding:7,fontSize:16}}>
+                   {item.message}
+               </Text>
+               <Text style={{color:'#eee',padding:3,fontSize:12}}>{item.time}</Text>
+           </View>
+       )
+   }
+
+   let {height,width}=Dimensions.get('window');
+
     return(
         <LinearGradient colors={['#2ecc71', '#27ae60']} style={styles.linearGradient}>
             <View style={styles.body}>
+                <FlatList 
+                style={{padding:10,height:height+0.8}}
+                data={messageList}
+                renderItem={renderRow}
+                keyExtractor={(item,index)=>index.toString()}
+                />
                 <TextInput style={styles.input} 
                            value={textMessage}
                            placeholder='   Enter Message'
