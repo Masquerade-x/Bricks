@@ -67,9 +67,7 @@ export default function AppNavigator({navigation}){
         )
       })}>
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Chat" component={ChatScreen} 
-       
-        />
+        <Stack.Screen name="Chat" component={ChatScreen} />
       </Stack.Navigator>
     )
   }

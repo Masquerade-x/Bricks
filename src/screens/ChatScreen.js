@@ -24,19 +24,24 @@ export default function ChatScreen({navigation,route}){
        .on("child_added",(value)=>{
            setMessageList(prevState=>[...prevState,value.val()])
        })
-   },[])
+   },[route.params.name])
 
 
    async function sendMessage(){
         if(textMessage.length>0){
-            let msgId=database().ref('messaages').child(route.params.name).push().key;
+            console.log(route.params.activeUserName,'pareamsdf');
+            console.log(route.params.name,'name h hfb');
+
+            let msgId=database().ref('messaages').child(route.params.activeUser).push().key;
             let updates ={};
             let message ={
                 message:textMessage,
                 time:database.ServerValue.TIMESTAMP,
                 from:route.params.activeUser
             }
+            updates['messages/'+route.params.activeUser+'/'+msgId]=message;
             updates['messages/'+route.params.name+'/'+msgId]=message;
+
             console.log(updates)
             database().ref().update(updates);
             setTextMessage('')
@@ -123,4 +128,4 @@ const styles = StyleSheet.create({
     sendBtn:{
         alignItems:'center',
     }
-})
+});

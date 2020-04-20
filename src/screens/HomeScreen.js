@@ -15,6 +15,7 @@ import database from '@react-native-firebase/database';
 import DrawerButton from '../components/DrawerButton';
 import LinearGradient from 'react-native-linear-gradient';
 
+
 async function getName() {
   try {
     const name = await AsyncStorage.getItem('@name');
@@ -33,15 +34,17 @@ export default function HomeScreen({navigation}){
     const {currentUser}=auth();
     const[activeUser,setActiveUser]=useState('')
     
+    console.log(activeUser,'active user');
+
     useEffect(()=>{
       if(currentUser){
-
         getName().then(name=>{
           currentUser.updateProfile({
             displayName:name,
           })
-          setActiveUser(name)
         })
+        setActiveUser(currentUser.displayName)
+
       }
     },[currentUser]);
 
@@ -78,14 +81,13 @@ export default function HomeScreen({navigation}){
             var userData = user.val();
             usersArray.push(userData);
           });
-          setUsers(usersArray)
-          //.filter(user => user.uid !== currentUser.uid)); // filter out current user before saving
+          setUsers(usersArray.filter(user => user.uid !== currentUser.uid)) // filter out current user before saving
         })
 
         return ()=>{
           unsubscribe && unsubscribe.off();
         };
-      },[]);
+      },[currentUser.uid]);
     
     renderRow = ({item})=>{
       console.log(item,'here is item')
