@@ -19,19 +19,18 @@ export default function LoginScreen({navigation}){
   const[errorMessage,setErrorMessage]=useState('');
   const[refreshing, setRefreshing] =useState(false);
 
-  async function onSignIn() {
-
-    // Get the users ID
-    const uid = auth().currentUser.uid;
-   
-    // Create a reference
-    const ref = database().ref(`/users/${uid}`);
-    // Fetch the data snapshot
-    const snapshot = await ref.once('value');
-    // setUserName(snapshot.child('name').val());
-     console.log(snapshot.child('displayName').val());  
-  }
-
+  const getErrorMessage = () => {
+    if (!email && !password) {
+      return 'Fields are mandatory';
+    }
+    if (!email) {
+      return 'Email is missing';
+    }
+    if (!password) {
+      return 'Password is missing';
+    }
+  };
+  
   useEffect(()=>{
     const unsubscribe = navigation.addListener('focus',()=>{
       onRefresh()
@@ -43,17 +42,22 @@ export default function LoginScreen({navigation}){
     setRefreshing(true)
     setEmail('')
     setPassword('')
+    setErrorMessage('')
     setRefreshing(false)
   },[refreshing])
 
- function handleLogin(AsyncStorage){
-    firebase.auth().signInWithEmailAndPassword(email,password)
-    .then(()=>{
-     onSignIn()
-      }
-    )
-    .catch(error=>setErrorMessage(error))   
-  
+ async function handleLogin(){
+   if(!email||!password){
+     const error = getErrorMessage();
+       setErrorMessage(error)
+     return;
+   }
+
+    try{
+      await firebase.auth().signInWithEmailAndPassword(email,password).then(()=>navigation.navigate('Home'))
+    }catch(error){
+        setErrorMessage(error.message)
+    }
   }
   
   return(
@@ -70,7 +74,7 @@ export default function LoginScreen({navigation}){
             <View style={styles.email}>
                 <TextInput label='Email' mode='outlined'style={styles.textInput}
                 onChangeText={e=>setEmail(e)} 
-                autoCapitalize="none"
+                 autoCapitalize="none"
                 value={email}></TextInput>
             </View>
             <View style={styles.password}>
@@ -108,10 +112,10 @@ const styles = StyleSheet.create({
   },
   errorMsg:{
     alignItems:'center',
-    justifyContent:'center'
+    justifyContent:'center',
   },
   error:{
-    fontSize:30
+    fontSize:15
   },
   form:{
     flex:2,

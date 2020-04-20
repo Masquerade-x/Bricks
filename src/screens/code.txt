@@ -1,0 +1,22 @@
+// async function onSignIn() {
+    //     // Get the users ID
+    //     const uid = auth().currentUser.uid;
+       
+    //     // Create a reference
+    //     const ref = database().ref(`/users/${uid}`);
+       
+    //     // Fetch the data snapshot
+    //     let dbRef = database().ref('users');
+    //     firebase.database().ref().child("users")
+    //     .on('value', function (snapshot) {
+    //         snapshot.forEach(function(childSnapshot) {
+    //           if(userName===name){
+    //             userName=name
+    //           }else{
+    //         var name=childSnapshot.val().name; 
+    //         console.log(name,'name')
+    //         setArr(prevState=> [...prevState,name])
+    //           } 
+    //       });
+    //      });
+    //   } 

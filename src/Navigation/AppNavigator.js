@@ -9,8 +9,8 @@ import { firebase } from '@react-native-firebase/auth';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import ChatScreen from '../screens/ChatScreen';
+import AsyncStorage from '@react-native-community/async-storage';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { IconButton ,Colors, Button} from 'react-native-paper';
 import {
   createDrawerNavigator,
@@ -18,31 +18,33 @@ import {
   DrawerItemList,
 } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {myName} from '../screens/ChatScreen';
-
-
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
-
-
-const firebaseConfig= {
-  apiKey:'AIzaSyC6TTpQUP8gZVC-nR6AxCvRMs15-ParSwI',
-  appId:'128020890766:android:d11240a7c7e00948a9b5df',
-  databaseURL:'https://probricks-929e5.firebaseio.com/'
-  };
-  firebase.initializeApp(firebaseConfig);
-
-
 
 export default function AppNavigator({navigation}){
   const [userToken, setUser] = useState({});
 
 
+  useEffect(() => {
+    const unsubscribe = auth().onAuthStateChanged(async user => {
+      setUser(user);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [navigation]);
+
+  async function logOut() {
+    await AsyncStorage.removeItem('@name');
+    await auth().signOut()
+  }
+
   function CustomDrawerContent(props) {
     return (
       <DrawerContentScrollView {...props}>
-        <Button mode="text" onPress={() => auth().signOut()}>
+        <Button mode="text" onPress={logOut}>
           Logout
         </Button>
         <Button mode="text" onPress={()=>navigation.navigate('Main')}>
@@ -72,44 +74,7 @@ export default function AppNavigator({navigation}){
     )
   }
 
-  async function onSignIn() {
-    // Get the users ID
-    const uid = auth().currentUser.uid;
-   
-    // Create a reference
-    const ref = database().ref(`/users/${uid}`);
-   
-    // Fetch the data snapshot
-    const snapshot = await ref.once('value');
-    
-    uName = snapshot.child('name').val();
-    // setUserName(uName);
-    console.log(uName);
 
-    // let dbRef = database().ref('users');
-    // dbRef.on('child_added',(val) => {
-    //   let person = val.val();
-    //   person.email=val.key;
-    //   setUsers(prevState=> {
-    //     return {
-    //       ...prevState.users,person
-    //     }
-    //   })
-    // })
-  }
-
-
-  useEffect(()=>{
-    const unsubscribe = auth().onAuthStateChanged(user=>{
-      setUser(user);
-      onSignIn();
-    })
-    return () => {
-      unsubscribe();
-    };
-
-
-  },[navigation])
 
   return(
     <NavigationContainer>

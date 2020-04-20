@@ -6,11 +6,12 @@ import {  IconButton,Colors } from 'react-native-paper'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import database from '@react-native-firebase/database';
 import LinearGradient from 'react-native-linear-gradient'
-import User from '../User';
 
 export default function ChatScreen({navigation,route}){
     const[textMessage,setTextMessage]=useState('')
     const[messageList,setMessageList]=useState([])
+
+    console.log(messageList,'meessage')
 
    useLayoutEffect(()=>{
        navigation.setOptions({
@@ -33,7 +34,7 @@ export default function ChatScreen({navigation,route}){
             let message ={
                 message:textMessage,
                 time:database.ServerValue.TIMESTAMP,
-                from:route.params.name
+                from:route.params.activeUser
             }
             updates['messages/'+route.params.name+'/'+msgId]=message;
             console.log(updates)
@@ -45,19 +46,20 @@ export default function ChatScreen({navigation,route}){
 
    renderRow =({item})=>{
        return(
+          <View >
            <View  style={{
                flexDirection:'row',
-               width:'60%',
-               alignItems:item.from===route.params.name ? 'flex-end':'flex-start',
-               backgroundColor:item.from===route.params.name ? '#00897b':'#7cb342',
+               alignSelf:route.params.activeUser===route.params.name ? 'flex-start':'flex-end',
+               backgroundColor:route.params.activeUser===route.params.name ? '#00897b':'#7cb342',
                borderRadius:5,
-               marginBottom:10
+               marginBottom:10,
            }}>
                <Text style={{color:'#fff',padding:7,fontSize:16}}>
                    {item.message}
                </Text>
                <Text style={{color:'#eee',padding:3,fontSize:12}}>{item.time}</Text>
            </View>
+        </View>   
        )
    }
 
@@ -68,7 +70,7 @@ export default function ChatScreen({navigation,route}){
                
             <View style={styles.body}>
             <FlatList 
-                style={{padding:10,height:height+0.8}}
+                style={styles.flat}
                 data={messageList}
                 renderItem={renderRow}
                 keyExtractor={(item,index)=>index.toString()}
@@ -99,6 +101,10 @@ const styles = StyleSheet.create({
     },
     body:{
         flex:1,
+    },
+    flat:{
+        padding:10,
+        flexDirection:'row'
     },
     enterMsg:{
         flexDirection:'row'
