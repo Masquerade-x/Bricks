@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import HomeScreen from '../screens/HomeScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import { firebase } from '@react-native-firebase/auth';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
@@ -17,7 +18,7 @@ import {
   DrawerContentScrollView,
   DrawerItemList,
 } from '@react-navigation/drawer';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import ContactScreen from '../screens/ContactScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -56,18 +57,12 @@ export default function AppNavigator({navigation}){
 
   function Main(){
     return(
-      <Stack.Navigator screenOptions={({navigation})=>({
-          headerLeftContainerStyle: {
-            paddingLeft: 10,
-          },
-        headerLeft:()=>(
-          <TouchableOpacity onPress={()=>navigation.toggleDrawer()}>
-            <Icon name="menu" size={30} color="black" />
-          </TouchableOpacity>
-        )
-      })}>
+      <Stack.Navigator screenOptions={{headerShown:false}}>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Chat" component={ChatScreen} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="Contact" component={ContactScreen} />
+
       </Stack.Navigator>
     )
   }

@@ -1,17 +1,17 @@
 import React, { useLayoutEffect,useState, useEffect } from 'react'
-import {Text,View,TextInput,StyleSheet,FlatList,Dimensions} from 'react-native'
+import {Text,View,TextInput,StyleSheet,FlatList,Dimensions,ImageBackground} from 'react-native'
 import { responsiveFontSize, responsiveWidth } from 'react-native-responsive-dimensions'
 import { useRoute } from '@react-navigation/native'
 import {  IconButton,Colors } from 'react-native-paper'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import database from '@react-native-firebase/database';
-import LinearGradient from 'react-native-linear-gradient'
+import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 export default function ChatScreen({navigation,route}){
     const[textMessage,setTextMessage]=useState('')
     const[messageList,setMessageList]=useState([])
-
-    console.log(messageList,'meessage')
 
    useLayoutEffect(()=>{
        navigation.setOptions({
@@ -27,6 +27,7 @@ export default function ChatScreen({navigation,route}){
    },[route.params.name])
 
 
+   console.log(route.params.activeUser,'user h ye')
    async function sendMessage(){
         if(textMessage.length>0){
             console.log(route.params.activeUserName,'pareamsdf');
@@ -51,11 +52,11 @@ export default function ChatScreen({navigation,route}){
 
    renderRow =({item})=>{
        return(
-          <View >
+          <View style={{width:responsiveWidth(95)}}>
            <View  style={{
                flexDirection:'row',
-               alignSelf:route.params.activeUser===route.params.name ? 'flex-start':'flex-end',
-               backgroundColor:route.params.activeUser===route.params.name ? '#00897b':'#7cb342',
+               alignSelf:item.from===route.params.activeUser ? 'flex-end':'flex-start',
+               backgroundColor:item.from===route.params.activeUser ? '#00897b':'#7cb342',
                borderRadius:5,
                marginBottom:10,
            }}>
@@ -70,10 +71,23 @@ export default function ChatScreen({navigation,route}){
 
    let {height,width}=Dimensions.get('window');
 
+
     return(
-        <LinearGradient colors={['#2ecc71', '#27ae60']} style={styles.linearGradient}>
-               
-            <View style={styles.body}>
+        <View style={styles.container}>
+             <ImageBackground
+                source={require('../assets/pic.jpg')}
+                style={styles.img}>
+            <View style={styles.header}>
+                <TouchableOpacity onPress={()=>navigation.toggleDrawer()} style={{marginLeft:5,alignItems:'flex-start'}}>
+                    <Icon name="menu" size={30} color="white" />
+                </TouchableOpacity>
+                
+                    <Text style={{fontSize:25}}>{route.params.name}</Text>
+
+                <TouchableOpacity onPress={()=>navigation.navigate('Contact',{name:route.params.name,email:route.params.email})} style={{marginRight:5,alignItems:'flex-end'}}>
+                    <Icon name="account-circle" size={35} color="white" />
+                </TouchableOpacity>
+            </View>
             <FlatList 
                 style={styles.flat}
                 data={messageList}
@@ -94,22 +108,30 @@ export default function ChatScreen({navigation,route}){
                         onPress={sendMessage}
                     />
                 </View>
-                
-            </View>
-        </LinearGradient>
+            </ImageBackground>
+        </View>
+            
     )
 }
 
 const styles = StyleSheet.create({
-    linearGradient:{
+    container:{
         flex:1
+    },
+    img:{flex:1,
+        opacity:0.8
     },
     body:{
         flex:1,
     },
+    header:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+    },
     flat:{
+        marginTop:10,
         padding:10,
-        flexDirection:'row'
+        flexDirection:'row',
     },
     enterMsg:{
         flexDirection:'row'

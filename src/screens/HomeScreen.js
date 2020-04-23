@@ -14,6 +14,8 @@ import Person from '../components/Person';
 import database from '@react-native-firebase/database';
 import DrawerButton from '../components/DrawerButton';
 import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import ChatScreen from './ChatScreen';
 
 
 async function getName() {
@@ -34,8 +36,6 @@ export default function HomeScreen({navigation}){
     const {currentUser}=auth();
     const[activeUser,setActiveUser]=useState('')
     
-    console.log(activeUser,'active user');
-
     useEffect(()=>{
       if(currentUser){
         getName().then(name=>{
@@ -53,9 +53,6 @@ export default function HomeScreen({navigation}){
     //   onSignIn()
     //   setRefreshing(false)
     // },[refreshing])
-
-    
-
 
       useEffect(()=>{
         const unsubscribe = auth().onAuthStateChanged(async user=>{
@@ -83,7 +80,6 @@ export default function HomeScreen({navigation}){
           });
           setUsers(usersArray.filter(user => user.uid !== currentUser.uid)) // filter out current user before saving
         })
-
         return ()=>{
           unsubscribe && unsubscribe.off();
         };
@@ -92,8 +88,8 @@ export default function HomeScreen({navigation}){
     renderRow = ({item})=>{
       console.log(item,'here is item')
         return(  
-            <TouchableOpacity onPress={()=>navigation.navigate('Chat',{name:item.name,activeUser:activeUser})} style={styles.touch}>
-              <Text style={{fontSize:20,marginTop:10,marginLeft:10,color:'white',fontFamily:'600'}}>
+            <TouchableOpacity onPress={()=>navigation.navigate('Chat',{name:item.name,activeUser:activeUser,email:item.email})} style={styles.touch}>
+              <Text style={{fontSize:20,marginTop:10,marginLeft:5,color:'white',fontFamily:'600'}}>
                 {item.name}
               </Text>
             </TouchableOpacity>              
@@ -104,8 +100,17 @@ export default function HomeScreen({navigation}){
       // <ScrollView contentContainerStyle={styles.scrollView} 
       // refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       //>     
-      <LinearGradient colors={['#2ecc71', '#27ae60']} style={styles.linearGradient}>
+      <LinearGradient colors={['#957DAD','#D291BC']} style={styles.linearGradient}>
+        <View styles={styles.header}>
+          
+          <TouchableOpacity style={{marginLeft:5}} onPress={()=>navigation.toggleDrawer()}>
+            <Icon name="menu" size={30} color="black" />
+          </TouchableOpacity>
+         
+          <Text>Hello</Text>
+        </View>
           <FlatList
+          style={styles.flat}
           data={users}
           renderItem={renderRow}
           keyExtractor={item=>item.uid}
@@ -117,14 +122,18 @@ export default function HomeScreen({navigation}){
     }
         
 const styles = StyleSheet.create({
-  scrollView:{
-    flex:1
-  },
     linearGradient:{
       flex:1,
-      backgroundColor:'red'
     },
+    header:{
+      backgroundColor:'red',
+      flexDirection:'row'
+    },
+    flat:{
+      marginTop:10,
+      padding:10,
+  },
     touch:{
-      height:40,
+      height:60,
     }
 })
