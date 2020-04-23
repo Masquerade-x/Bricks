@@ -82,7 +82,7 @@ export default function ChatScreen({navigation,route}){
                     <Icon name="menu" size={30} color="white" />
                 </TouchableOpacity>
                 
-                    <Text style={{fontSize:25}}>{route.params.name}</Text>
+                    <Text style={{fontSize:25,color:'white'}}>{route.params.name}</Text>
 
                 <TouchableOpacity onPress={()=>navigation.navigate('Contact',{name:route.params.name,email:route.params.email})} style={{marginRight:5,alignItems:'flex-end'}}>
                     <Icon name="account-circle" size={35} color="white" />

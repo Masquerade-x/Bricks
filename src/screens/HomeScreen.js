@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import {SafeAreaView,View,StyleSheet,RefreshControl,ScrollView} from 'react-native'
+import {SafeAreaView,View,StyleSheet,RefreshControl,ScrollView, ImageBackground} from 'react-native'
 import {Text, IconButton, Colors } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 import  {firebase} from '@react-native-firebase/auth';
@@ -89,7 +89,7 @@ export default function HomeScreen({navigation}){
       console.log(item,'here is item')
         return(  
             <TouchableOpacity onPress={()=>navigation.navigate('Chat',{name:item.name,activeUser:activeUser,email:item.email})} style={styles.touch}>
-              <Text style={{fontSize:20,marginTop:10,marginLeft:5,color:'white',fontFamily:'600'}}>
+              <Text style={{fontSize:25,marginTop:10,marginLeft:5,color:'black'}}>
                 {item.name}
               </Text>
             </TouchableOpacity>              
@@ -99,8 +99,10 @@ export default function HomeScreen({navigation}){
     return(    
       // <ScrollView contentContainerStyle={styles.scrollView} 
       // refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      //>     
-      <LinearGradient colors={['#957DAD','#D291BC']} style={styles.linearGradient}>
+      //>    
+      <ImageBackground
+      source={require('../assets/home.jpg')}
+      style={styles.img}> 
         <View styles={styles.header}>
           
           <TouchableOpacity style={{marginLeft:5}} onPress={()=>navigation.toggleDrawer()}>
@@ -115,14 +117,14 @@ export default function HomeScreen({navigation}){
           renderItem={renderRow}
           keyExtractor={item=>item.uid}
            />
-      </LinearGradient>
+          </ImageBackground>
       // </ScrollView>
 
          )
     }
         
 const styles = StyleSheet.create({
-    linearGradient:{
+    img:{
       flex:1,
     },
     header:{
