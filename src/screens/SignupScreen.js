@@ -1,7 +1,7 @@
 
 import React,{useState, useEffect} from 'react';
-import {SafeAreaView,View,StyleSheet} from 'react-native'
-import { Button,TextInput,Text,Avatar} from 'react-native-paper';
+import {SafeAreaView,View,StyleSheet,TextInput} from 'react-native'
+import { Button,Text,Avatar} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {
   responsiveHeight,
@@ -70,13 +70,13 @@ export default function Signup({navigation}){
     <View style={styles.container}>
         <View style={styles.form}> 
         <View style={[styles.name,styles.class]}>
-                <TextInput label='Name' mode='outlined' style={styles.textInput} autoCapitalize="none" onChangeText={e=>setName(e)} value={name}></TextInput>
+                <TextInput  placeholder='Enter Full Name' style={styles.textInput} autoCapitalize="none" onChangeText={e=>setName(e)} value={name}></TextInput>
             </View>
             <View style={[styles.email,styles.class]}>
-                <TextInput label='Email' mode='outlined' style={styles.textInput} autoCapitalize="none" onChangeText={e=>setEmail(e)} value={email}></TextInput>
+                <TextInput  placeholder='Enter Email' style={styles.textInput} autoCapitalize="none" onChangeText={e=>setEmail(e)} value={email}></TextInput>
             </View>
             <View style={[styles.class,styles.password]}>
-                <TextInput label='Password' mode='outlined' style={styles.textInput} autoCapitalize="none" onChangeText={e=>setPassword(e)} value={password}></TextInput>
+                <TextInput placeholder='Enter Password'  style={styles.textInput} autoCapitalize="none" onChangeText={e=>setPassword(e)} value={password}></TextInput>
             </View>
             <View style={[styles.btnText,styles.class]}>
                   <Button  mode="contained" onPress={onCreateAccount} style={styles.btn}>
@@ -93,6 +93,7 @@ export default function Signup({navigation}){
 const styles = StyleSheet.create({
   container:{
     flex:1,
+    backgroundColor:'white'
     },
   welcomemsg:{
     flex:1,
@@ -112,6 +113,10 @@ const styles = StyleSheet.create({
   },
   textInput:{
     width:responsiveWidth(80),
+    width:responsiveWidth(80),
+    borderBottomColor:'#6310e3',
+    borderBottomWidth:StyleSheet.hairlineWidth,
+    color:'#6310e3'
   },
   btnText:{
     alignItems:'center',

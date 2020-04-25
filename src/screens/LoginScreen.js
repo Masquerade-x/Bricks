@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import {SafeAreaView,Text,View,StyleSheet,RefreshControl,ScrollView,ImageBackground,TextInput} from 'react-native'
+import {SafeAreaView,Text,View,StyleSheet,RefreshControl,ScrollView,Image,TextInput} from 'react-native'
 import Icon from 'react-native-vector-icons/AntDesign';
 import {  Button} from "react-native-paper";
 import {
@@ -64,11 +64,9 @@ export default function LoginScreen({navigation}){
       <ScrollView contentContainerStyle={styles.scrollView} refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }>
-      <ImageBackground source={require('../assets/sky.jpg')}
-                style={styles.img}>
 
         <View style={styles.welcomemsg}>
-        <Icon name="login" size={90} color="#6a0dad" />
+        <Image source={require('../assets/icon.png')} style={styles.img}/>
         </View>
         <View style={styles.errorMsg}>
             <Text style={styles.error}>{errorMessage}</Text>
@@ -77,12 +75,14 @@ export default function LoginScreen({navigation}){
             <View style={styles.email}>
                 <TextInput label='Email' style={styles.textInput}
                 onChangeText={e=>setEmail(e)} 
+                placeholder='Enter Email'
                  autoCapitalize="none"
                 value={email}></TextInput>
             </View>
             <View style={styles.password}>
                 <TextInput label='Password' style={styles.textInput}
                  secureTextEntry 
+                 placeholder='Enter Password'
                  onChangeText={pass=>setPassword(pass)} 
                  autoCapitalize="none"
                  value={password}></TextInput>
@@ -91,15 +91,14 @@ export default function LoginScreen({navigation}){
                   <Button  mode="contained" onPress={handleLogin} style={styles.btn}>
                         Sign In
                   </Button>
-                  <Text style={{marginTop:10}}>New to it ?<Text onPress={()=>navigation.navigate('Signup')} style={{color:'#6a0dad'}}> Signup</Text></Text>
+                  <Text style={{marginTop:10}}>New to it ?<Text onPress={()=>navigation.navigate('Signup')} style={{color:'#6310e3'}}> Signup</Text></Text>
             </View>
           </View>
           <View styles={styles.owner}>
-            <Text style={{alignSelf:'flex-end',color:'white'}}>
+            <Text style={{alignSelf:'flex-end',color:'#6310e3',marginEnd:10}}>
               &#xA9;Masquerade
              </Text>
           </View>
-          </ImageBackground>
         </ScrollView>
   )
     
@@ -108,9 +107,12 @@ export default function LoginScreen({navigation}){
 const styles = StyleSheet.create({
     scrollView:{
       flex:1,
+      backgroundColor:'white'
     },
     img:{
-      flex:1
+      width:responsiveWidth(26),
+      height:responsiveHeight(15),
+      marginTop:90
     },
   welcomemsg:{
     flex:1,
@@ -138,9 +140,9 @@ const styles = StyleSheet.create({
   },
   textInput:{
     width:responsiveWidth(80),
-    borderBottomColor:'white',
+    borderBottomColor:'#6310e3',
     borderBottomWidth:StyleSheet.hairlineWidth,
-    color:'white'
+    color:'#6310e3'
   },
   btnText:{
     alignItems:'center',

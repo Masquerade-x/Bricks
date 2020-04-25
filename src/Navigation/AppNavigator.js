@@ -48,7 +48,7 @@ export default function AppNavigator({navigation}){
         <Button mode="text" onPress={logOut}>
           Logout
         </Button>
-        <Button mode="text" onPress={()=>navigation.navigate('Main')}>
+        <Button mode="text" onPress={()=>navigation.navigate('Home')}>
           Home
         </Button>
       </DrawerContentScrollView>
@@ -72,13 +72,13 @@ export default function AppNavigator({navigation}){
   return(
     <NavigationContainer>
         {userToken === null ? (
-        <Stack.Navigator>
-            <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Navigator screenOptions={{headerShown:false}}>
+            <Stack.Screen name="Login" component={LoginScreen}  />
             <Stack.Screen name="Signup" component={SignupScreen} />
         </Stack.Navigator>
         ):(
         <Drawer.Navigator  drawerContent={props => <CustomDrawerContent {...props} />}>
-            <Drawer.Screen name="Main" component={Main} options={{title:"Chats"}}/>
+            <Drawer.Screen name="Main" component={Main}/>
         </Drawer.Navigator>
         )}
   </NavigationContainer>

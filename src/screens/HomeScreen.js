@@ -17,6 +17,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ChatScreen from './ChatScreen';
 import { useRoute } from '@react-navigation/native';
+import { ceil } from 'react-native-reanimated';
 
 
 async function getName() {
@@ -94,8 +95,8 @@ export default function HomeScreen({navigation}){
     renderRow = ({item})=>{
       console.log(item,'here is item')
         return(  
-            <TouchableOpacity onPress={()=>navigation.navigate('Chat',{name:item.name,activeUser:activeUser,email:item.email})} style={styles.touch}>
-              <Text style={{fontSize:25,marginTop:10,marginLeft:5,color:'black'}}>
+            <TouchableOpacity  onPress={()=>navigation.navigate('Chat',{name:item.name,activeUser:activeUser,email:item.email})} style={styles.touch}>
+              <Text style={{opacity:1,fontSize:25,marginTop:10,marginLeft:15,color:'#6310e3'}}>
                 {item.name}
               </Text>
             </TouchableOpacity>              
@@ -103,47 +104,49 @@ export default function HomeScreen({navigation}){
       }
     
     return(    
-      // <ScrollView contentContainerStyle={styles.scrollView} 
-      // refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      //>    
+      <ScrollView contentContainerStyle={styles.scrollView} >    
       
-      <View style={styles.container}>
-        <ImageBackground
-          source={require('../assets/grad.jpg')}
-          style={styles.img}>
-        <View styles={styles.header}>
+        <ImageBackground source={require('../assets/chat.jpeg')}
+                style={styles.img}>      
+          <View style={styles.header}>
           
-          <TouchableOpacity style={{marginLeft:5}} onPress={()=>navigation.toggleDrawer()}>
-            <Icon name="menu" size={30} color="black" />
+          <TouchableOpacity style={{marginLeft:5,width:30,marginTop:5}} onPress={()=>navigation.toggleDrawer()}>
+            <Icon name="menu" size={35} color="white" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>navigation.navigate('Profile',{name:activeUser,uid:activeUid})} style={{marginRight:5,alignItems:'flex-end'}}>
+          <Text style={{fontSize:32,color:'white',fontWeight:"100"}}>Chats</Text>
+          <TouchableOpacity onPress={()=>navigation.navigate('Profile',{name:activeUser,uid:activeUid})} style={{marginRight:10,width:30,marginTop:5}}>
                     <Icon name="account-circle" size={35} color="white" />
           </TouchableOpacity>
 
+      
         </View>
+        <View >
           <FlatList
-          style={styles.flat}
-          data={users}
-          renderItem={renderRow}
-          keyExtractor={item=>item.uid}
-           />
-        </ImageBackground>
+            style={styles.flat}
+            data={users}
+            renderItem={renderRow}
+            keyExtractor={item=>item.uid}
+            />
         </View>
+        </ImageBackground>
+        </ScrollView>
 
          )
     }
         
 const styles = StyleSheet.create({
-    container:{
-      flex:1,
+    scrollView:{
+    flex:1
     },
     img:{
-      flex:1
+      flex:1,
     },
     header:{
-      backgroundColor:'red',
-      flexDirection:'row',
-      justifyContent:'space-between'
+      flexDirection:"row",
+      justifyContent:'space-between',
+      height:50,
+      backgroundColor:"#6310e3",
+      borderRadius:7
     },
     flat:{
       marginTop:10,
@@ -153,7 +156,11 @@ const styles = StyleSheet.create({
   },
     touch:{
       height:60,
-      borderBottomColor:'black',
-      borderBottomWidth:StyleSheet.hairlineWidth
+      marginTop:10,
+      borderColor:'white',
+      backgroundColor:'white',
+      borderRadius:50,
+      opacity:0.8,
+      justifyContent:"flex-start",
     }
 })

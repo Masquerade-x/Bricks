@@ -1,6 +1,6 @@
 import React, { useLayoutEffect,useState, useEffect } from 'react'
-import {Text,View,TextInput,StyleSheet,FlatList,Dimensions,ImageBackground} from 'react-native'
-import { responsiveFontSize, responsiveWidth } from 'react-native-responsive-dimensions'
+import {Text,View,TextInput,StyleSheet,FlatList,Dimensions,ImageBackground,ScrollView} from 'react-native'
+import { responsiveFontSize, responsiveWidth, responsiveHeight } from 'react-native-responsive-dimensions'
 import { useRoute } from '@react-navigation/native'
 import {  IconButton,Colors } from 'react-native-paper'
 import { TouchableOpacity } from 'react-native-gesture-handler'
@@ -73,13 +73,11 @@ export default function ChatScreen({navigation,route}){
 
 
     return(
-        <View style={styles.container}>
-             <ImageBackground
-                source={require('../assets/pic.jpg')}
-                style={styles.img}>
+        <ImageBackground source={require('../assets/chats.jpeg')}
+                style={styles.img}>  
             <View style={styles.header}>
-                <TouchableOpacity onPress={()=>navigation.toggleDrawer()} style={{marginLeft:5,alignItems:'flex-start'}}>
-                    <Icon name="menu" size={30} color="white" />
+                <TouchableOpacity onPress={()=>navigation.toggleDrawer()} style={{marginLeft:5,alignItems:'flex-start',width:30}}>
+                    <Icon name="menu" size={34} color="white" />
                 </TouchableOpacity>
                 
                     <Text style={{fontSize:25,color:'white'}}>{route.params.name}</Text>
@@ -88,13 +86,15 @@ export default function ChatScreen({navigation,route}){
                     <Icon name="account-circle" size={35} color="white" />
                 </TouchableOpacity>
             </View>
+            <ScrollView contentContainerStyle={styles.scrollView} > 
             <FlatList 
                 style={styles.flat}
                 data={messageList}
                 renderItem={renderRow}
                 keyExtractor={(item,index)=>index.toString()}
                 />
-                <View style={styles.enterMsg}>
+            </ScrollView>
+            <View style={styles.enterMsg}>
                     <TextInput style={styles.input} 
                             value={textMessage}
                             placeholder='   Enter Message'
@@ -108,18 +108,17 @@ export default function ChatScreen({navigation,route}){
                         onPress={sendMessage}
                     />
                 </View>
+
             </ImageBackground>
-        </View>
             
     )
 }
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1
-    },
-    img:{flex:1,
-        opacity:0.8
+
+    img:{
+        flex:1,
+        
     },
     body:{
         flex:1,
@@ -127,6 +126,10 @@ const styles = StyleSheet.create({
     header:{
         flexDirection:'row',
         justifyContent:'space-between',
+        backgroundColor:"#6310e3",
+        height:responsiveHeight(7),
+        borderRadius:4,
+        paddingTop:5
     },
     flat:{
         marginTop:10,
@@ -149,5 +152,6 @@ const styles = StyleSheet.create({
     },
     sendBtn:{
         alignItems:'center',
+        marginTop:9
     }
 });
