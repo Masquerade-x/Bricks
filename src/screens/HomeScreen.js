@@ -16,6 +16,7 @@ import DrawerButton from '../components/DrawerButton';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ChatScreen from './ChatScreen';
+import { useRoute } from '@react-navigation/native';
 
 
 async function getName() {
@@ -35,15 +36,19 @@ export default function HomeScreen({navigation}){
     const[users,setUsers]=useState([]);
     const {currentUser}=auth();
     const[activeUser,setActiveUser]=useState('')
+    const[activeUid,setActiveUid]=useState('')
+
     
     useEffect(()=>{
       if(currentUser){
+        console.log(currentUser)
         getName().then(name=>{
           currentUser.updateProfile({
             displayName:name,
           })
         })
-        setActiveUser(currentUser.displayName)
+        setActiveUser(currentUser.displayName);
+        setActiveUid(currentUser.uid)
 
       }
     },[currentUser]);
@@ -78,12 +83,13 @@ export default function HomeScreen({navigation}){
             var userData = user.val();
             usersArray.push(userData);
           });
-          setUsers(usersArray.filter(user => user.uid !== currentUser.uid)) // filter out current user before saving
+          setUsers(usersArray);
+          //setUsers(usersArray.filter(user => user.uid !== currentUser.uid)) // filter out current user before saving
         })
         return ()=>{
           unsubscribe && unsubscribe.off();
         };
-      },[currentUser.uid]);
+      },[]);
     
     renderRow = ({item})=>{
       console.log(item,'here is item')
@@ -100,16 +106,20 @@ export default function HomeScreen({navigation}){
       // <ScrollView contentContainerStyle={styles.scrollView} 
       // refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       //>    
-      <ImageBackground
-      source={require('../assets/home.jpg')}
-      style={styles.img}> 
+      
+      <View style={styles.container}>
+        <ImageBackground
+          source={require('../assets/grad.jpg')}
+          style={styles.img}>
         <View styles={styles.header}>
           
           <TouchableOpacity style={{marginLeft:5}} onPress={()=>navigation.toggleDrawer()}>
             <Icon name="menu" size={30} color="black" />
           </TouchableOpacity>
-         
-          <Text>Hello</Text>
+          <TouchableOpacity onPress={()=>navigation.navigate('Profile',{name:activeUser,uid:activeUid})} style={{marginRight:5,alignItems:'flex-end'}}>
+                    <Icon name="account-circle" size={35} color="white" />
+          </TouchableOpacity>
+
         </View>
           <FlatList
           style={styles.flat}
@@ -117,25 +127,33 @@ export default function HomeScreen({navigation}){
           renderItem={renderRow}
           keyExtractor={item=>item.uid}
            />
-          </ImageBackground>
-      // </ScrollView>
+        </ImageBackground>
+        </View>
 
          )
     }
         
 const styles = StyleSheet.create({
-    img:{
+    container:{
       flex:1,
+    },
+    img:{
+      flex:1
     },
     header:{
       backgroundColor:'red',
-      flexDirection:'row'
+      flexDirection:'row',
+      justifyContent:'space-between'
     },
     flat:{
       marginTop:10,
       padding:10,
+      borderBottomColor:'grey',
+      borderBottomWidth:StyleSheet.hairlineWidth
   },
     touch:{
       height:60,
+      borderBottomColor:'black',
+      borderBottomWidth:StyleSheet.hairlineWidth
     }
 })

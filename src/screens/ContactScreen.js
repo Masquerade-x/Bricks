@@ -2,7 +2,6 @@ import React from 'react';
 import {Text, View,StyleSheet} from 'react-native'
 import {Card} from 'react-native-elements'
 import { responsiveWidth, responsiveHeight } from 'react-native-responsive-dimensions';
-import { IconButton, Colors } from 'react-native-paper';
 
 export default function ContactScreen({navigation,route}){
     console.log(route.params.email,'email')

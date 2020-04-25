@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import {SafeAreaView,View,StyleSheet,RefreshControl,ScrollView} from 'react-native'
-import { Button,TextInput,Text,Avatar} from 'react-native-paper';
+import {SafeAreaView,Text,View,StyleSheet,RefreshControl,ScrollView,ImageBackground,TextInput} from 'react-native'
 import Icon from 'react-native-vector-icons/AntDesign';
+import {  Button} from "react-native-paper";
 import {
   responsiveHeight,
   responsiveWidth,
@@ -64,6 +64,9 @@ export default function LoginScreen({navigation}){
       <ScrollView contentContainerStyle={styles.scrollView} refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }>
+      <ImageBackground source={require('../assets/sky.jpg')}
+                style={styles.img}>
+
         <View style={styles.welcomemsg}>
         <Icon name="login" size={90} color="#6a0dad" />
         </View>
@@ -72,13 +75,13 @@ export default function LoginScreen({navigation}){
         </View>
         <View style={styles.form}> 
             <View style={styles.email}>
-                <TextInput label='Email' mode='outlined'style={styles.textInput}
+                <TextInput label='Email' style={styles.textInput}
                 onChangeText={e=>setEmail(e)} 
                  autoCapitalize="none"
                 value={email}></TextInput>
             </View>
             <View style={styles.password}>
-                <TextInput label='Password' mode='outlined' style={styles.textInput}
+                <TextInput label='Password' style={styles.textInput}
                  secureTextEntry 
                  onChangeText={pass=>setPassword(pass)} 
                  autoCapitalize="none"
@@ -92,10 +95,11 @@ export default function LoginScreen({navigation}){
             </View>
           </View>
           <View styles={styles.owner}>
-            <Text style={{alignSelf:'flex-end'}}>
+            <Text style={{alignSelf:'flex-end',color:'white'}}>
               &#xA9;Masquerade
              </Text>
           </View>
+          </ImageBackground>
         </ScrollView>
   )
     
@@ -104,6 +108,9 @@ export default function LoginScreen({navigation}){
 const styles = StyleSheet.create({
     scrollView:{
       flex:1,
+    },
+    img:{
+      flex:1
     },
   welcomemsg:{
     flex:1,
@@ -130,7 +137,10 @@ const styles = StyleSheet.create({
     marginBottom:40,
   },
   textInput:{
-    width:responsiveWidth(80)
+    width:responsiveWidth(80),
+    borderBottomColor:'white',
+    borderBottomWidth:StyleSheet.hairlineWidth,
+    color:'white'
   },
   btnText:{
     alignItems:'center',
